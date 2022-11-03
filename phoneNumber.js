@@ -59,12 +59,6 @@ const parsePhoneNumber = phoneNumber => {
   let digits, separators, digitsStr
   const spaceOrDash = /[-\s]/g
 
-  // BUG:
-  // After running .exec on phoneNumber, spaceOrDash.lastIndex should be at the first digit after the area code. Instead it's at 0. -_-
-  // This is the reference I'm using for my solution: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/exec
-  // Update: The regular expression needed to be "global". Will ask Voit.
-
-  /*
   // Call .exec() to grab the position of the separator between the area code and the phone number.
   separators = spaceOrDash.exec(phoneNumber)
   startDigits = spaceOrDash.lastIndex
@@ -74,16 +68,8 @@ const parsePhoneNumber = phoneNumber => {
   midDigits = spaceOrDash.lastIndex
 
   // Get dem digits
-  digits = phoneNumber.slice(startDigits, midDigits) + phoneNumber.slice(midDigits + 1)
-  */
-
-  // Get the last seven digits of the phone number
-  separators = spaceOrDash.exec(phoneNumber)
-  digitsStr = phoneNumber.slice(spaceOrDash.lastIndex)
-  //console.log(`Space or dash (${separators[0]}) ending at index ${spaceOrDash.lastIndex}.`)
-
-  // Remove the separator character
-  digits = digitsStr.replace(spaceOrDash, '')
+  digits = phoneNumber.slice(startDigits, midDigits-1)
+  digits += phoneNumber.slice(midDigits)
 
   return {
     areaCode: areaCode,
