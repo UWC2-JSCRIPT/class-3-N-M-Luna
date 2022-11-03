@@ -44,19 +44,8 @@ console.log(testPhoneNumber('(206) 33-4444')); // should return false, missing a
 
 const parsePhoneNumber = phoneNumber => {
 
-  let areaCode
-  const parenthesis = /^[(]\d{3}[)]/
-
-  // If the input number begins with a parenthesis,
-  if (parenthesis.exec(phoneNumber)) {
-    // the area code is in chars 1,2, and 3,
-    areaCode = phoneNumber.slice(1, 4)
-  } else { // Else if the input number does not begin with a parenthesis,
-    // the area code is in chars 0, 1, 2,
-    areaCode = phoneNumber.slice(0, 3)
-  }
-
-  let digits, separators, digitsStr
+  let areaCode, digits, separators
+  const parenthesis = /[(]/
   const spaceOrDash = /[-\s]/g
 
   // Call .exec() to grab the position of the separator between the area code and the phone number.
@@ -68,15 +57,23 @@ const parsePhoneNumber = phoneNumber => {
   midDigits = spaceOrDash.lastIndex
 
   // Get dem digits
-  digits = phoneNumber.slice(startDigits, midDigits-1)
+  digits = phoneNumber.slice(startDigits, midDigits - 1)
   digits += phoneNumber.slice(midDigits)
+
+  // If phoneNumber has an open parenthesis, the area code is in the next three characters
+  if (parenthesis.exec(phoneNumber)) {
+    startAreaCode = parenthesis.lastIndex + 1
+    areaCode = phoneNumber.slice(startAreaCode, startAreaCode + 3)
+  } else {
+    // If phoneNumber does not have any parenthesis, the area code starts at the beginning of the string and stops before the digits start
+    areaCode = phoneNumber.slice(0, startDigits-1)
+  }
 
   return {
     areaCode: areaCode,
     phoneNumber: digits
   }
 }
-
 
 /*
 // Solution without as much use of .exec()
