@@ -44,6 +44,30 @@ console.log(testPhoneNumber('(206) 33-4444')); // should return false, missing a
 
 const parsePhoneNumber = phoneNumber => {
 
+  // Area Code
+  const threeDigits = /\d{3}/
+  let match = threeDigits.exec(phoneNumber)
+  const areaCode = match[0]
+
+  // First three digits
+  match = threeDigits.exec(phoneNumber)
+  let digits = match[0]
+
+  // Last four digits
+  const fourDigits = /\d{4}/
+  match = fourDigits.exec(phoneNumber)
+  digits += match[0]
+
+  return {
+    areaCode: areaCode,
+    phoneNumber: digits
+  }
+}
+
+/*
+// Solution before reading the instructions on Canvas.
+const parsePhoneNumber = phoneNumber => {
+
   let areaCode, digits, separators
   const parenthesis = /[(]/
   const spaceOrDash = /[-\s]/g
@@ -74,6 +98,7 @@ const parsePhoneNumber = phoneNumber => {
     phoneNumber: digits
   }
 }
+*/
 
 /*
 // Solution without as much use of .exec()
